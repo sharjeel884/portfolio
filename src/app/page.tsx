@@ -1,10 +1,11 @@
 import { profileData } from "@/content/profile";
 import { experienceData } from "@/content/experience";
 import { skillCategories } from "@/content/skills";
-import { personalProjects, homeProjectCount } from "@/content/personal-projects";
+import { personalProjects, homeProjectCount, homeProjectNames } from "@/content/personal-projects";
 import Link from "next/link";
 import { SmoothScrollNav } from "@/components/sections/SmoothScrollNav";
 import { ScrollAnimations } from "@/components/sections/ScrollAnimations";
+import { ProjectScreenshots } from "@/components/ui/ProjectScreenshots";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -27,9 +28,9 @@ function urlLabel(url: string): string {
 }
 
 export default function HomePage() {
-  const allSkills = skillCategories.flatMap((cat) =>
-    cat.skills.map((s) => s.name)
-  );
+  const allSkills = [
+    ...new Set(skillCategories.flatMap((cat) => cat.skills.map((s) => s.name))),
+  ];
 
   const contactLinks: ContactLink[] = [
     {
@@ -73,7 +74,9 @@ export default function HomePage() {
     },
   ];
 
-  const featuredProjects = personalProjects.slice(0, homeProjectCount);
+  const featuredProjects = homeProjectNames
+    .map((name) => personalProjects.find((p) => p.name === name))
+    .filter((p): p is (typeof personalProjects)[number] => Boolean(p));
   const hasMoreProjects = personalProjects.length > homeProjectCount;
 
   const [firstName, ...rest] = profileData.name.split(" ");
@@ -180,7 +183,7 @@ export default function HomePage() {
               >
                 <header className="lg:text-right">
                   <h3
-                    className="chroma text-[clamp(1.125rem,1.6vw,1.375rem)] font-light text-(--ink-1)"
+                    className="chroma text-[clamp(1.125rem,1.6vw,1.375rem)] font-semibold tracking-tight text-(--ink-1)"
                     data-stagger={i}
                   >
                     {exp.company}
@@ -228,7 +231,7 @@ export default function HomePage() {
                 <h3 className="chroma t-meta text-(--ink-3)">Education</h3>
               </header>
               <div>
-                <p className="chroma text-[clamp(1rem,1.4vw,1.1875rem)] font-light text-(--ink-1)">
+                <p className="chroma text-[clamp(1rem,1.4vw,1.1875rem)] font-semibold tracking-tight text-(--ink-1)">
                   {profileData.education.degree}
                 </p>
                 <p className="chroma t-meta mt-1.5">
@@ -275,32 +278,42 @@ export default function HomePage() {
             </div>
 
             {/* Card grid */}
-            <div className="project-cards-grid">
+            <div className="project-cards-grid project-cards-grid--home">
               {featuredProjects.map((project, i) => (
-                <a
+                <div
                   key={project.name}
-                  href={project.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="chroma project-card group"
                   data-stagger={i}
-                  aria-label={`${project.name} — ${project.urlLabel}`}
                 >
                   {/* Card number */}
                   <span className="project-card-num" aria-hidden="true">
                     {String(i + 1).padStart(2, "0")}
                   </span>
 
-                  {/* Arrow icon — top right, shows on hover */}
-                  <span className="project-card-arrow" aria-hidden="true">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M7 17L17 7M7 7h10v10" />
-                    </svg>
-                  </span>
+                  {project.screenshots && project.screenshots.length > 0 && (
+                    <ProjectScreenshots
+                      name={project.name}
+                      screenshots={project.screenshots}
+                      layout={project.screenshotLayout}
+                    />
+                  )}
 
                   {/* Content */}
                   <div className="project-card-body">
-                    <h3 className="project-card-title">{project.name}</h3>
+                    <h3 className="project-card-title">
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="project-card-title-link"
+                        aria-label={`${project.name} — ${project.urlLabel}`}
+                      >
+                        {project.name}
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="inline ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <path d="M7 17L17 7M7 7h10v10" />
+                        </svg>
+                      </a>
+                    </h3>
                     <p className="project-card-desc">{project.description}</p>
                   </div>
 
@@ -315,7 +328,7 @@ export default function HomePage() {
                     </div>
                     <span className="project-card-domain">{project.urlLabel}</span>
                   </footer>
-                </a>
+                </div>
               ))}
             </div>
 
