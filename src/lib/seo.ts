@@ -11,6 +11,12 @@ export function getPersonJsonLd() {
     description: profileData.supportingStatement,
     url: siteBaseUrl,
     sameAs: [profileData.github, profileData.linkedin],
+    subjectOf: profileData.resumes.map((resume) => ({
+      "@type": "DigitalDocument",
+      name: resume.label,
+      url: `${siteBaseUrl}${resume.url}`,
+      encodingFormat: "application/pdf",
+    })),
     email: profileData.email,
     telephone: profileData.phone,
     alumniOf: {

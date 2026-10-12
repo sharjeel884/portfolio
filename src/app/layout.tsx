@@ -1,11 +1,34 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { profileData } from "@/content/profile";
 import { getPersonJsonLd, getWebSiteJsonLd, siteBaseUrl } from "@/lib/seo";
-import CursorGlow from "@/components/ui/CursorGlow";
+import { Backdrop } from "@/components/layout/Backdrop";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ScrollAnimations } from "@/components/sections/ScrollAnimations";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-space-grotesk",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains",
+  preload: false,
+});
 
 export const viewport: Viewport = {
-  themeColor: [{ media: "(prefers-color-scheme: dark)", color: "#0a0a0a" }],
+  themeColor: "#0b1530",
   width: "device-width",
   initialScale: 1,
 };
@@ -21,12 +44,12 @@ export const metadata: Metadata = {
     "Frontend Engineer",
     "React Engineer",
     "Next.js Developer",
-    "React Native Specialist",
-    "TypeScript Architect",
-    "Web Accessibility WCAG",
-    "Web Performance Optimization",
-    "Node.js Backend",
+    "React Native Developer",
+    "TypeScript",
+    "Web Accessibility",
+    "Web Performance",
     "UI Engineering",
+    "Lahore",
   ],
   authors: [{ name: profileData.name, url: siteBaseUrl }],
   creator: profileData.name,
@@ -37,31 +60,15 @@ export const metadata: Metadata = {
     title: `${profileData.name} - ${profileData.role}`,
     description: profileData.supportingStatement,
     siteName: `${profileData.name} Portfolio`,
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: `${profileData.name} - Frontend Engineer Portfolio`,
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${profileData.name} - ${profileData.role}`,
     description: profileData.supportingStatement,
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
   },
   alternates: {
     canonical: siteBaseUrl,
@@ -77,20 +84,16 @@ export default function RootLayout({
   const websiteJsonLd = getWebSiteJsonLd();
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+      className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrains.variable}`}
+    >
       <head>
-        {/* Anti-flash: read persisted theme before first paint to avoid FOUC */}
         <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.add('light')}else if(t==='dark'){document.documentElement.classList.add('dark')}else if(!window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.classList.add('light')}}catch(e){}})();`,
-          }}
+          dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
         />
-        {/* Preconnect to Google Fonts */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Backdrop is painted by CSS, so preload it to avoid a flash of flat black */}
-        <link rel="preload" as="image" href="/background-texture.webp" type="image/webp" />
-        {/* Schema.org Structured Data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
@@ -100,12 +103,15 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className="antialiased min-h-screen">
+      <body className="flex min-h-screen flex-col antialiased" suppressHydrationWarning>
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <CursorGlow />
-        {children}
+        <Backdrop />
+        <SiteHeader />
+        <ScrollAnimations />
+        <div className="relative z-10 flex flex-1 flex-col">{children}</div>
+        <SiteFooter />
       </body>
     </html>
   );

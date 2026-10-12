@@ -21,9 +21,10 @@ export function ProjectScreenshots({
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [zoom, setZoom] = useState(1);
-  const [mounted, setMounted] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const touchDeltaX = useRef(0);
+  const loadedSlides = useRef(new Set<number>());
+  const [ready, setReady] = useState<ReadonlySet<number>>(() => new Set([0]));
 
   const count = screenshots.length;
   const isLandscape = layout === "landscape";
@@ -32,9 +33,35 @@ export function ProjectScreenshots({
   const maxZoom = 3;
   const zoomStep = 0.25;
 
-  useEffect(() => {
-    setMounted(true);
+  const markReady = useCallback((slide: number) => {
+    setReady((prev) => {
+      if (prev.has(slide)) return prev;
+      const next = new Set(prev);
+      next.add(slide);
+      return next;
+    });
   }, []);
+
+  const prefetchNeighbor = useCallback(
+    (slide: number) => {
+      if (count < 2) return;
+      markReady((slide + 1) % count);
+    },
+    [count, markReady],
+  );
+
+  useEffect(() => {
+    markReady(index);
+    if (loadedSlides.current.has(index)) prefetchNeighbor(index);
+  }, [index, markReady, prefetchNeighbor]);
+
+  const onSlideLoad = useCallback(
+    (slide: number) => {
+      loadedSlides.current.add(slide);
+      if (slide === index) prefetchNeighbor(slide);
+    },
+    [index, prefetchNeighbor],
+  );
 
   const goTo = useCallback(
     (next: number) => {
@@ -154,15 +181,21 @@ export function ProjectScreenshots({
                 onClick={() => openLightbox(i)}
                 aria-label={`View ${name} screenshot ${i + 1} of ${count}`}
               >
-                <Image
-                  src={shot.src}
-                  alt={shot.alt}
-                  width={isLandscape ? 1024 : 460}
-                  height={isLandscape ? 760 : 920}
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="project-shot-img"
-                  priority={i === 0}
-                />
+                {ready.has(i) ? (
+                  <Image
+                    src={shot.src}
+                    alt={shot.alt}
+                    width={isLandscape ? 1024 : 460}
+                    height={isLandscape ? 760 : 920}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    quality={60}
+                    loading="lazy"
+                    fetchPriority="low"
+                    decoding="async"
+                    className="project-shot-img"
+                    onLoad={() => onSlideLoad(i)}
+                  />
+                ) : null}
               </button>
             ))}
           </div>
@@ -222,8 +255,7 @@ export function ProjectScreenshots({
         </div>
       </div>
 
-      {mounted &&
-        lightboxOpen &&
+      {lightboxOpen &&
         createPortal(
           <div
             className="project-lightbox"
@@ -301,11 +333,11 @@ export function ProjectScreenshots({
                   <Image
                     src={lightboxShot.src}
                     alt={lightboxShot.alt}
-                    width={isLandscape ? 1600 : 460}
-                    height={isLandscape ? 1000 : 996}
+                    width={isLandscape ? 1280 : 720}
+                    height={isLandscape ? 800 : 1280}
                     sizes="(min-width: 900px) 80vw, 94vw"
+                    quality={70}
                     className="project-lightbox-img"
-                    priority
                   />
                 </div>
               </div>
@@ -343,7 +375,11 @@ export function ProjectScreenshots({
                       alt=""
                       width={isLandscape ? 160 : 72}
                       height={isLandscape ? 100 : 156}
-                      sizes="72px"
+                      sizes="96px"
+                      quality={55}
+                      loading="lazy"
+                      fetchPriority="low"
+                      decoding="async"
                       className="project-lightbox-thumb-img"
                     />
                   </button>

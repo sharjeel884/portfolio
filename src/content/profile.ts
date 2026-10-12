@@ -11,7 +11,13 @@ export interface Profile {
   email: string;
   github: string;
   linkedin: string;
-  resumeUrl: string;
+  resumes: {
+    id: string;
+    label: string;
+    description: string;
+    url: string;
+    filename: string;
+  }[];
   yearsOfExperience: string;
   education: {
     degree: string;
@@ -41,7 +47,7 @@ export const profileData: Profile = {
   role: "Frontend Engineer",
   specialization: "React, React Native, Next.js, TypeScript",
   supportingStatement:
-    "Frontend Engineer with 4+ years of experience delivering high-performance, accessible web and mobile applications. Strong in React, React Native, Next.js, and TypeScript, with hands-on experience building scalable component systems, integrating REST APIs, improving performance, and leading code reviews.",
+    "Frontend Engineer with 5 years of experience delivering high-performance, accessible web and mobile applications. Strong in React, React Native, Next.js, and TypeScript, with hands-on experience building scalable component systems, integrating REST APIs, improving performance, and leading code reviews.",
   backendPositioning:
     "Effective at turning product requirements into maintainable frontend architecture and reliable user experiences, working closely with backend engineers to design, troubleshoot, and optimize application data flows.",
   location: "Lahore, Pakistan",
@@ -51,8 +57,23 @@ export const profileData: Profile = {
   email: "sharjeelkhalid416@gmail.com",
   github: "https://github.com/sharjeel884",
   linkedin: "https://www.linkedin.com/in/sharjeelkhalid07",
-  resumeUrl: "/resume.pdf",
-  yearsOfExperience: "4+",
+  resumes: [
+    {
+      id: "frontend",
+      label: "Senior Frontend CV",
+      description: "React, React Native, Next.js, and TypeScript focus",
+      url: "/cv/sharjeel-khalid-senior-frontend.pdf",
+      filename: "Sharjeel-Khalid-Senior-Frontend-CV.pdf",
+    },
+    {
+      id: "fullstack",
+      label: "Full-Stack CV",
+      description: "Frontend plus Node.js, APIs, and product delivery",
+      url: "/cv/sharjeel-khalid-fullstack.pdf",
+      filename: "Sharjeel-Khalid-Full-Stack-CV.pdf",
+    },
+  ],
+  yearsOfExperience: "5",
   education: {
     degree: "Bachelor of Science in Computer Science",
     institution: "University of the Punjab",
@@ -62,7 +83,7 @@ export const profileData: Profile = {
   metrics: [
     {
       label: "Frontend Experience",
-      value: "4+ Years",
+      value: "5 Years",
       description: "Building production web and mobile applications",
     },
     {

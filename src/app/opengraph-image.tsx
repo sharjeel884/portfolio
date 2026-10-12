@@ -8,98 +8,66 @@ export const size = {
 };
 export const contentType = "image/png";
 
+const chipColors = ["#3b82f6", "#60a5fa"];
+
 export default async function Image() {
   return new ImageResponse(
     (
       <div
         style={{
-          background: "linear-gradient(135deg, #09090b 0%, #18181b 100%)",
           width: "100%",
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-start",
           justifyContent: "space-between",
-          padding: "80px",
+          padding: "72px",
           fontFamily: "sans-serif",
-          color: "#ffffff",
-          border: "12px solid #27272a",
+          color: "#f1f5ff",
+          background:
+            "radial-gradient(circle at 10% 10%, rgba(59,130,246,0.55), transparent 45%), radial-gradient(circle at 90% 90%, rgba(96,165,250,0.45), transparent 50%), #0b1530",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
           <div
             style={{
-              width: "48px",
-              height: "48px",
-              borderRadius: "12px",
-              background: "rgba(56, 189, 248, 0.2)",
-              border: "2px solid #38bdf8",
+              width: "64px",
+              height: "64px",
+              borderRadius: "18px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#38bdf8",
-              fontSize: "24px",
-              fontWeight: "bold",
-            }}
-          >
-            &gt;_
-          </div>
-          <div style={{ fontSize: "28px", fontWeight: "bold", color: "#f4f4f5" }}>
-            {profileData.name}
-          </div>
-          <div
-            style={{
-              fontSize: "16px",
-              background: "rgba(16, 185, 129, 0.2)",
-              color: "#34d399",
-              padding: "6px 14px",
-              borderRadius: "20px",
-              border: "1px solid rgba(52, 211, 153, 0.4)",
-            }}
-          >
-            4+ Years Frontend Experience
-          </div>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <div
-            style={{
-              fontSize: "52px",
+              fontSize: "28px",
               fontWeight: 800,
-              lineHeight: 1.15,
-              color: "#ffffff",
-              maxWidth: "1000px",
+              color: "#fff",
+              background: "linear-gradient(120deg, #3b82f6, #60a5fa)",
             }}
           >
-            Frontend Engineer specializing in React, Next.js, React Native & TypeScript
+            SK
           </div>
-          <div
-            style={{
-              fontSize: "24px",
-              color: "#a1a1aa",
-              maxWidth: "950px",
-            }}
-          >
-            Accessible architectures, resilient state management, defendable performance, and practical Node.js backend capability.
+          <div style={{ fontSize: "30px", fontWeight: 700 }}>{profileData.name}</div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+          <div style={{ fontSize: "76px", fontWeight: 800, lineHeight: 1.02, letterSpacing: "-0.04em" }}>
+            {profileData.role}
+          </div>
+          <div style={{ fontSize: "28px", color: "#c3cde6", maxWidth: "950px" }}>
+            {`${profileData.yearsOfExperience} years building fast, accessible web & mobile products.`}
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            gap: "16px",
-          }}
-        >
-          {profileData.coreTechnologies.map((t, idx) => (
+        <div style={{ display: "flex", gap: "14px" }}>
+          {profileData.coreTechnologies.map((t, i) => (
             <div
-              key={idx}
+              key={t.name}
               style={{
-                fontSize: "18px",
-                background: "#27272a",
-                padding: "8px 18px",
-                borderRadius: "8px",
-                color: "#38bdf8",
-                border: "1px solid #3f3f46",
+                fontSize: "22px",
+                fontWeight: 600,
+                padding: "10px 22px",
+                borderRadius: "999px",
+                color: "#fff",
+                background: "rgba(11,21,48,0.6)",
+                border: `2px solid ${chipColors[i % chipColors.length]}`,
               }}
             >
               {t.name}
@@ -108,8 +76,6 @@ export default async function Image() {
         </div>
       </div>
     ),
-    {
-      ...size,
-    }
+    { ...size },
   );
 }
