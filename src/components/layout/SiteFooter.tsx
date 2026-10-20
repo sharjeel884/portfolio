@@ -4,10 +4,11 @@ import { profileData } from "@/content/profile";
 import { contactLinks } from "@/lib/contact-links";
 
 const footerNav = [
-  { href: "/about", label: "About" },
-  { href: "/experience", label: "Experience" },
+  { href: "/#about", label: "About" },
+  { href: "/#skills", label: "Skills" },
+  { href: "/#experience", label: "Experience" },
   { href: "/projects", label: "Projects" },
-  { href: "/contact", label: "Contact" },
+  { href: "/#contact", label: "Contact" },
 ];
 
 export function SiteFooter() {

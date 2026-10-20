@@ -13,28 +13,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
-      url: `${siteBaseUrl}/about`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${siteBaseUrl}/experience`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
-    {
       url: `${siteBaseUrl}/projects`,
       lastModified: currentDate,
       changeFrequency: "monthly",
       priority: 0.85,
-    },
-    {
-      url: `${siteBaseUrl}/contact`,
-      lastModified: currentDate,
-      changeFrequency: "yearly",
-      priority: 0.7,
     },
     ...profileData.resumes.map((resume) => ({
       url: `${siteBaseUrl}${resume.url}`,

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowRight, MapPin, Package, Rocket } from "lucide-react";
 import { profileData } from "@/content/profile";
 import { personalProjects } from "@/content/personal-projects";
@@ -37,6 +36,7 @@ export function HeroSection() {
 
   return (
     <section
+      id="home"
       aria-labelledby="hero-heading"
       className="relative flex min-h-svh items-center overflow-hidden pt-32 pb-20 lg:pt-28"
     >
@@ -68,13 +68,13 @@ export function HeroSection() {
           </p>
 
           <div className="reveal flex flex-wrap gap-3" style={{ ["--stagger" as string]: 3 }}>
-            <Link href="/projects" className="btn btn-primary">
+            <a href="#projects" className="btn btn-primary">
               View my work
               <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
-            <Link href="/contact" className="btn btn-ghost">
+            </a>
+            <a href="#contact" className="btn btn-ghost">
               Let&apos;s talk
-            </Link>
+            </a>
           </div>
 
           <dl

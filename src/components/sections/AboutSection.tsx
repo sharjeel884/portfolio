@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { ArrowRight, Briefcase, GraduationCap, MapPin, Package } from "lucide-react";
+import { Briefcase, GraduationCap, MapPin, Package } from "lucide-react";
 import { profileData } from "@/content/profile";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Blobby, RingDashed } from "@/components/ui/Graphics";
@@ -18,12 +17,6 @@ export function AboutSection() {
             <>
               Turning product ideas into <span className="text-gradient">delightful</span> interfaces
             </>
-          }
-          action={
-            <Link href="/about" className="btn btn-ghost">
-              More about me
-              <ArrowRight className="size-4" aria-hidden="true" />
-            </Link>
           }
         />
 

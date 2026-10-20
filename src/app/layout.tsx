@@ -56,7 +56,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: siteBaseUrl,
+    // Relative to the current route so child pages do not inherit the homepage URL.
+    url: "./",
     title: `${profileData.name} - ${profileData.role}`,
     description: profileData.supportingStatement,
     siteName: `${profileData.name} Portfolio`,
@@ -71,9 +72,14 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: siteBaseUrl,
+    // "./" resolves against metadataBase and the current pathname.
+    canonical: "./",
   },
 };
+
+function serializeJsonLd(data: unknown) {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
 
 export default function RootLayout({
   children,
@@ -90,20 +96,18 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrains.variable}`}
     >
-      <head>
+      <body className="flex min-h-screen flex-col antialiased" suppressHydrationWarning>
         <script
           dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteJsonLd) }}
         />
-      </head>
-      <body className="flex min-h-screen flex-col antialiased" suppressHydrationWarning>
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
